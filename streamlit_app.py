@@ -16,6 +16,9 @@ def filter_messages(chat_text):
         if not skip:
             filtered_lines.append(line)
 
+    # Remove empty lines
+    filtered_lines = [line for line in filtered_lines if line.strip()]
+
     return "\n".join(filtered_lines)
 
 st.title("WhatsApp Chat Filter")
