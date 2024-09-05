@@ -1,7 +1,7 @@
 import streamlit as st
 
 def filter_messages(chat_text):
-    keywords = ["Looking", "Want", "Sold Order", "WTB", "Need", "This message was deleted", "image omitted", "quote"]
+    keywords = ["Looking", "Want", "Sold Order", "WTB", "Need", "This message was deleted", "image omitted", "quote", "NTQ"]
     lower_keywords = [keyword.lower() for keyword in keywords]
     lines = chat_text.split("\n")
     filtered_lines = []
