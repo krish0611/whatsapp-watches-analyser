@@ -4,7 +4,7 @@ import re
 
 def filter_messages(chat_text):
     # Define keywords for filtering messages
-    keywords = ["Looking", "Want", "Sold Order", "WTB", "Need", "This message was deleted", "image omitted", "quote", "NTQ"]
+    keywords = ["Looking", "Want", "Sold Order", "WTB", "Need", "This message was deleted", "image omitted", "quote", "NTQ","invite link","Disappearing messages","changed their phone","Waiting for this message"]
     lower_keywords = [keyword.lower() for keyword in keywords]
     
     # Regular expression to identify date and timestamp
