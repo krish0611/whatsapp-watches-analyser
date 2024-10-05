@@ -1,4 +1,5 @@
 import streamlit as st
+import pandas as pd
 
 def filter_messages(chat_text):
     keywords = ["Looking", "Want", "Sold Order", "WTB", "Need", "This message was deleted", "image omitted", "quote", "NTQ"]
@@ -19,11 +20,16 @@ def filter_messages(chat_text):
     # Remove empty lines
     filtered_lines = [line for line in filtered_lines if line.strip()]
 
-    return "\n".join(filtered_lines)
+    return filtered_lines
 
 st.title("WhatsApp Chat Filter")
 
 chat_text = st.text_area("Paste your WhatsApp chat here:")
 if st.button("Filter Chat"):
     filtered_chat = filter_messages(chat_text)
-    st.text_area("Filtered Chat:", value=filtered_chat, height=500)
+    
+    # Create a DataFrame with the filtered messages
+    chat_df = pd.DataFrame(filtered_chat, columns=["Message"])
+    
+    # Display the DataFrame as a table
+    st.dataframe(chat_df)
