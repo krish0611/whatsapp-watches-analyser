@@ -21,11 +21,14 @@ def filter_messages(chat_text):
         # Start a new message when we detect a timestamp
         if re.match(timestamp_pattern, line):
             if current_message:
-                filtered_messages.append("\n".join(current_message))
+                full_message = "\n".join(current_message)
+                # Add the message if not skipping
+                if not skip:
+                    filtered_messages.append(full_message)
             current_message = [line]  # Start a new message block
             skip = False  # Reset the skip flag
 
-        # Skip lines that contain any of the keywords
+        # Skip lines if any keyword is present
         elif any(keyword in lower_line for keyword in lower_keywords):
             skip = True
 
@@ -34,7 +37,7 @@ def filter_messages(chat_text):
             current_message.append(line)
     
     # Add the last message to the filtered messages list
-    if current_message:
+    if current_message and not skip:
         filtered_messages.append("\n".join(current_message))
     
     return filtered_messages
