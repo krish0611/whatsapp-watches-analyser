@@ -1,26 +1,43 @@
 import streamlit as st
 import pandas as pd
+import re
 
 def filter_messages(chat_text):
+    # Define keywords for filtering messages
     keywords = ["Looking", "Want", "Sold Order", "WTB", "Need", "This message was deleted", "image omitted", "quote", "NTQ"]
     lower_keywords = [keyword.lower() for keyword in keywords]
+    
+    # Regular expression to identify date and timestamp
+    timestamp_pattern = r"\[\d{2}/\d{2}/\d{2}, \d{1,2}:\d{2}:\d{2}(\s?AM|\s?PM)?\]"
+    
     lines = chat_text.split("\n")
-    filtered_lines = []
+    filtered_messages = []
+    current_message = []
     skip = False
-
+    
     for line in lines:
         lower_line = line.lower()
-        if any(keyword in lower_line for keyword in lower_keywords):
+
+        # Start a new message when we detect a timestamp
+        if re.match(timestamp_pattern, line):
+            if current_message:
+                filtered_messages.append("\n".join(current_message))
+            current_message = [line]  # Start a new message block
+            skip = False  # Reset the skip flag
+
+        # Skip lines that contain any of the keywords
+        elif any(keyword in lower_line for keyword in lower_keywords):
             skip = True
-        elif skip and line.startswith("["):
-            skip = False
-        if not skip:
-            filtered_lines.append(line)
 
-    # Remove empty lines
-    filtered_lines = [line for line in filtered_lines if line.strip()]
-
-    return filtered_lines
+        # If not skipping, append line to the current message
+        elif not skip:
+            current_message.append(line)
+    
+    # Add the last message to the filtered messages list
+    if current_message:
+        filtered_messages.append("\n".join(current_message))
+    
+    return filtered_messages
 
 st.title("WhatsApp Chat Filter")
 
